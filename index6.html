@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Expenses Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 30;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+        }
+        .header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 0;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1700px;
+            margin: 0 auto;
+            padding: 0 50px;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .nav-menu {
+            display: flex;
+            list-style-type: none;
+        }
+        .nav-menu li {
+            margin-left: 20px;
+        }
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .nav-menu a:hover {
+            color: #4CAF50;
+        }
+        .social-icons {
+            display: flex;
+        }
+        .social-icons a {
+            color: #fff;
+            margin-left: 15px;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+        .social-icons a:hover {
+            color: #4CAF50;
+        }   
+       
+        .container {
+            max-width: 1300px;
+            margin: 0px auto;
+            background-color: #f7f1f19d;
+            padding: 20px;
+            /* border-radius: 0px; */
+            /* box-shadow: 0 0 10px rgba(0,0,0,0.1); */
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input, select, button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #expensesList {
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        #chartContainer {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+           
+        }
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .nav-menu {
+                margin-top: 10px;
+            }
+            .nav-menu li {
+                margin: 0 10px;
+            }
+            .social-icons {
+                margin-top: 10px;
+            }
+        }
+        .dashboard {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0px;
+    gap: 0px;
+    /* justify-content: space-between; */
+    margin-top: 0px;
+}
+
+.budget-section {
+    flex: 1;
+    min-width: 100px;
+    background-color: #f9f9f9;
+    border-radius: 40px;
+    padding: 50px;
+    margin-right: 20px;
+}
+.calculator  {
+    flex: 1;
+    min-width: 100px;
+    background-color: #f9f9f9;
+    border-radius: 40px;
+    padding: 10px;
+    margin-right: 20px;
+}
+.budget-progress {
+    height: 20px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.budget-bar {
+    height: 100%;
+    background-color: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+.budget-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+
+.budget-section {
+    margin-left: 20px;
+}
+
+/* Mobile responsive styles */
+
+/* For screens with a maximum width of 768px (e.g., tablets) */
+@media (max-width: 768px) {
+    .budget-section, .calculator {
+        flex-basis: 100%; /* Make each section take up the full width */
+        margin-right: 0; /* Remove the margin between sections */
+    }
+    .budget-section {
+        margin-left: 0; /* Remove the margin from the left */
+    }
+}
+
+/* For screens with a maximum width of 480px (e.g., mobile phones) */
+@media (max-width: 580px) {
+    .budget-section  {
+        padding: 20px; /* Reduce the padding to make the sections more compact */
+    }
+    .calculator{
+        padding: 10px; /* Reduce the padding to make the sections more compact */
+        margin-left:auto;
+    }
+    .budget-progress {
+        height: 15px; /* Reduce the height of the progress bar */
+    }
+    .budget-info {
+        font-size: 0.7em; /* Reduce the font size of the budget info */
+    }
+}
+    </style>
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <a href="mindex.html"><img src="/images/logo51-removebg-preview.png" alt="Expense Tracker Logo" style="width: 400px; height: auto; margin: 0 10px;"></a>
+              </div>            <nav>
+                <ul class="nav-menu">
+                    <li><a href="mindex.html">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="calculator3.html">Ex Calculator</a></li>
+                    <li><a href="#">Application</a></li>
+                </ul>
+            </nav>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Personal Expenses Tracker</h1>
+        <form id="expenseForm">
+            <input type="text" id="description" placeholder="Description" required>
+            <input type="number" id="amount" placeholder="Amount" step="0.01" required>
+            <select id="category" required>
+                <option value="">Select Category</option>
+                <option value="Food">Food</option>
+                <option value="Medical">Medical</option>
+                <option value="Transport">Transport</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Utilities">Utilities</option>
+            </select>
+            <button type="submit">Add Expense</button>
+        </form>
+        <div id="expensesList">
+            <h2>Expenses List</h2>
+            <table id="expensesTable">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="chartContainer">
+            <canvas id="expensesChart"></canvas>
+        </div>
+    </div>
+    <div class="dashboard">
+    <div class="budget-section">
+        <h2>Monthly Budget</h2>
+        <form id="budgetForm">
+          <input type="number" id="budgetAmount" placeholder="Set monthly budget" step="0.01" required>
+          <input type="range" id="budgetSlider" min="0" max="10000" value="0" step="100">
+          <button type="submit">Set Budget</button>
+        </form>
+        <div class="budget-progress">
+          <div id="budgetBar" class="budget-bar"></div>
+        </div>
+        <div class="budget-info">
+          <span id="budgetDisplay">Budget: $0.00</span>
+          <span id="remainingBudgetDisplay">Remaining: $0.00</span>
+        </div>
+    </div>
+    <div class="calculator">
+        <input type="text" id="display" disabled>
+        <div class="buttons">
+          <button class="button" id="clear">C</button>
+          <button class="button" id="backspace">&larr;</button>
+          <button class="button" id="divide">/</button>
+          <button class="button" id="multiply">*</button>
+          <button class="button" id="subtract">-</button>
+          <button class="button" id="add">+</button>
+          <button class="button" id="equals">=</button>
+          <button class="button" id="zero">0</button>
+          <button class="button" id="one">1</button>
+          <button class="button" id="two">2</button>
+          <button class="button" id="three">3</button>
+          <button class="button" id="four">4</button>
+          <button class="button" id="five">5</button>
+          <button class="button" id="six">6</button>
+          <button class="button" id="seven">7</button>
+          <button class="button" id="eight">8</button>
+          <button class="button" id="nine">9</button>
+          <button class="button" id="decimal">.</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    const display = document.getElementById('display');
+const buttons = document.querySelectorAll('.button');
+
+let currentNumber = '';
+let previousNumber = '';
+let operator = '';
+
+buttons.forEach(button => {
+  button.addEventListener('click', () => {
+    const value = button.textContent;
+
+    if (value === 'C') {
+      currentNumber = '';
+      previousNumber = '';
+      operator = '';
+      display.value = '';
+    } else if (value === '=') {
+      if (operator === '+') {
+        display.value = parseFloat(previousNumber) + parseFloat(currentNumber);
+      } else if (operator === '-') {
+        display.value = parseFloat(previousNumber) - parseFloat(currentNumber);
+      } else if (operator === '*') {
+        display.value = parseFloat(previousNumber) * parseFloat(currentNumber);
+      } else if (operator === '/') {
+        display.value = parseFloat(previousNumber) / parseFloat(currentNumber);
+      }
+      currentNumber = display.value;
+      previousNumber = '';
+      operator = '';
+    } else if (value === '.') {
+      if (!currentNumber.includes('.')) {
+        currentNumber += '.';
+      }
+      display.value = currentNumber;
+    } else if (value === '+' || value === '-' || value === '*' || value === '/') {
+      previousNumber = currentNumber;
+      currentNumber = '';
+      operator = value;
+    } else {
+      currentNumber += value;
+      display.value = currentNumber;
+    }
+  });
+});
+</script>
+    <script>
+        // The JavaScript remains the same as in the previous version
+        let expenses = [];
+        const form = document.getElementById('expenseForm');
+        const expensesTable = document.getElementById('expensesTable').getElementsByTagName('tbody')[0];
+        const ctx = document.getElementById('expensesChart').getContext('2d');
+        let chart;
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const description = document.getElementById('description').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const category = document.getElementById('category').value;
+
+            expenses.push({ description, amount, category });
+            updateExpensesTable();
+            updateChart();
+            form.reset();
+        });
+
+        function updateExpensesTable() {
+            expensesTable.innerHTML = '';
+            expenses.forEach((expense, index) => {
+                const row = expensesTable.insertRow();
+                row.innerHTML = `
+                    <td>${expense.description}</td>
+                    <td>$${expense.amount.toFixed(2)}</td>
+                    <td>${expense.category}</td>
+                `;
+            });
+        }
+
+        function updateChart() {
+            const categoryTotals = expenses.reduce((acc, expense) => {
+                acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
+                return acc;
+            }, {});
+
+            const data = {
+                labels: Object.keys(categoryTotals),
+                datasets: [{
+                    data: Object.values(categoryTotals),
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF'
+                    ]
+                }]
+            };
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'pie',
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.parsed || 0;
+                                    const total = context.dataset.data.reduce((acc, data) => acc + data, 0);
+                                    const percentage = ((value / total) * 100).toFixed(2) + '%';
+                                    return `${label}: $${value.toFixed(2)} (${percentage})`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize empty chart
+        updateChart();
+    </script>
+    <script src="iindex.js"></script>
+</body>
+</html>

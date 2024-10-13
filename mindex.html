@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Expense Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+     .header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 0;
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1700px;
+            margin: 0 auto;
+            padding: 0 50px;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        body {
+    font-family: Arial, sans-serif;
+}
+
+.login-signup-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000; /* Ensure button is on top */
+}
+
+.form-container {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure form is on top */
+}
+
+.form-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+    position: relative;
+    z-index: 1001; /* Ensure form content is above the overlay */
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Blur effect for the body */
+.blur {
+    filter: blur(5px);
+}
+
+
+        .nav-menu {
+            display: flex;
+            list-style-type: none;
+        }
+        .nav-menu li {
+            margin-left: 30px;
+        }
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .nav-menu a:hover {
+            color: #4CAF50;
+        }
+        .social-icons {
+            display: flex;
+        }
+        .social-icons a {
+            color: #fff;
+            margin-left: 15px;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+        .social-icons a:hover {
+            color: #4CAF50;
+        }   
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .nav-menu {
+                margin-top: 10px;
+            }
+            .nav-menu li {
+                margin: 0 10px;
+            }
+            .social-icons {
+                margin-top: 10px;
+            }
+        }   
+    body.dark-mode {
+    background-color: #121212;
+    color: #f5f5f5;
+}
+.card.dark-mode {
+    background-color: #1e1e1e;
+    margin-left: 50px;
+    border-color: #333;
+}
+
+        
+        .card {
+            margin: 0px;
+        }
+        .overview-card {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <a href="mindex.html"><img src="/images/logo51-removebg-preview.png" alt="Expense Tracker Logo" style="width: 400px; height: auto; margin: 0 10px;"></a>
+              </div>
+              
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="index6.html">Expense Tracker</a></li>
+                    <li><a href="/cal3/calculator3.html">Ex Calculator</a></li>
+                    <li><a href="#">Application</a></li>
+                </ul>
+            </nav>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </header>
+    
+    
+    <!-- Header
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Personal Expense Tracker</span>
+            <div class="d-flex">
+                <input type="date" class="form-control me-2" placeholder="Select Date Range">
+                <img src="abc.png" alt="Profile" class="rounded-circle" style="width: 50px; height: 50px;">            </div>
+        </div>
+    </nav> -->
+
+    <!-- Overview Cards -->
+    <div class="container my-4">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h5>Total Balance</h5>
+                        <h2>$3,500</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h5>Monthly Income</h5>
+                        <h2>$5,000</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-danger text-white">
+                    <div class="card-body">
+                        <h5>Total Expenses</h5>
+                        <h2>$1,500</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <h5>Savings</h5>
+                        <h2>$1,000</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expense Breakdown Pie Chart -->
+        <div class="row my-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Expense Breakdown</h5>
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expense Trends Line Chart -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Expense Trends</h5>
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="exportCSV">Export to CSV</button>
+
+        <!-- Recent Transactions Table -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Recent Transactions</h5>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Payment Method</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Jan 1, 2024</td>
+                                    <td>Groceries</td>
+                                    <td>Supermarket</td>
+                                    <td>$200</td>
+                                    <td>Credit Card</td>
+                                </tr>
+                                <!-- More rows here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Budget vs Actual Bar Chart -->
+        <div class="row my-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Budget vs Actual</h5>
+                        <canvas id="budgetChart"></canvas>
+                        <div class="alert alert-warning" id="budgetAlert" style="display: none;">
+                            Warning: You have exceeded 80% of your budget in some categories!
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-3 bg-light">
+        &copy; 2024 Expense Tracker | Version 1.0
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>document.getElementById('loginSignupBtn').addEventListener('click', function() {
+        document.getElementById('formContainer').style.display = 'flex';
+    });
+    
+    document.getElementById('closeBtn').addEventListener('click', function() {
+        document.getElementById('formContainer').style.display = 'none';
+    });
+    
+    // Optional: Handle signup button functionality
+    document.getElementById('signupBtn').addEventListener('click', function() {
+        alert("Redirecting to signup process..."); // Replace with actual signup logic
+    });
+    
+    // Optional: Handle form submission
+    document.getElementById('authForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        // Add your login logic here
+        alert("Logging in...");
+        document.getElementById('formContainer').style.display = 'none'; // Close form after login
+    });
+</script>
+    
+    <script>
+        document.getElementById('exportCSV').addEventListener('click', function() {
+    const rows = [
+        ['Date', 'Category', 'Description', 'Amount', 'Payment Method'],
+        ['Jan 1, 2024', 'Groceries', 'Supermarket', '200', 'Credit Card'],
+        // More rows here...
+    ];
+
+    let csvContent = "data:text/csv;charset=utf-8,"
+        + rows.map(e => e.join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "expenses.csv");
+    document.body.appendChild(link);
+
+    link.click();
+});
+
+    </script>
+    <script>document.getElementById('darkModeToggle').addEventListener('change', function() {
+        document.body.classList.toggle('dark-mode');
+    });</script>
+    <script>const budgetData = [250, 600, 200, 150, 100]; // Budget amounts
+        const actualData = [200, 500, 150, 100, 90];  // Actual spending
+        
+        // Check if actual spending exceeds 80% of budget in any category
+        let exceeded = false;
+        for (let i = 0; i < budgetData.length; i++) {
+            if (actualData[i] > budgetData[i] * 0.8) {
+                exceeded = true;
+                break;
+            }
+        }
+        
+        if (exceeded) {
+            document.getElementById('budgetAlert').style.display = 'block';
+        }
+        </script>
+    <!-- Include necessary JS libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Pie Chart for Expense Breakdown
+        const expenseCtx = document.getElementById('expenseChart').getContext('2d');
+        new Chart(expenseCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Groceries', 'Rent', 'Entertainment', 'Transportation', 'Utilities'],
+                datasets: [{
+                    label: 'Expenses',
+                    data: [200, 500, 150, 100, 50],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+                }]
+            }
+        });
+
+        // Line Chart for Expense Trends
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan 1', 'Jan 2', 'Jan 3', 'Jan 4', 'Jan 5'],
+                datasets: [{
+                    label: 'Daily Expenses',
+                    data: [100, 150, 200, 300, 100],
+                    borderColor: '#36A2EB',
+                    fill: false
+                }]
+            }
+        });
+
+        // Bar Chart for Budget vs Actual
+        const budgetCtx = document.getElementById('budgetChart').getContext('2d');
+        new Chart(budgetCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Groceries', 'Rent', 'Entertainment', 'Transportation', 'Utilities'],
+                datasets: [
+                    {
+                        label: 'Budget',
+                        data: [250, 600, 200, 150, 100],
+                        backgroundColor: '#FFCE56'
+                    },
+                    {
+                        label: 'Actual',
+                        data: [200, 500, 150, 100, 50],
+                        backgroundColor: '#FF6384'
+                    }
+                ]
+            }
+        });
+    </script>
+     <script src="js/main.js"></script>
+</body>
+</html>
